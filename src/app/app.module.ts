@@ -1,3 +1,7 @@
+// Firestore
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { provideAuth, getAuth} from '@angular/fire/auth';
+import { provideFirestore, getFirestore} from '@angular/fire/firestore';
 // Modulos
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -10,8 +14,12 @@ import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.componen
 import { LoginComponent } from './auth/login/login.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { NgModule } from '@angular/core';
+//NgRx
+import {ReactiveFormsModule} from '@angular/forms'
 import { RegisterComponent } from './auth/register/register.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { environment } from '../environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -28,7 +36,13 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    // AngularFireModule.initializeApp(environment.firebase),
+    // AngularFirestoreModule
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
   bootstrap: [AppComponent]

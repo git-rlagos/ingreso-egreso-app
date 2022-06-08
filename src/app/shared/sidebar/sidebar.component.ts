@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -8,9 +12,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService,
+              private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  logout(){
+
+    Swal.fire({
+      title: '¡Cerrando sesión!',
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer')
+      }
+    })
+
+    this.authService.logout().then( () => {
+      setInterval(() => {
+        Swal.close();
+        this.router.navigate(['/login']);}, 400);
+
+    });
   }
 
 }
