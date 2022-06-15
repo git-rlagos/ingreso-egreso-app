@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { AppState } from '../../app.reducers';
+import { AppStateWithIngreso } from '../ingreso-egreso.reducers';
 import { IngresoEgreso } from '../../models/ingreso-egreso.model';
 import { IngresoEgresoService } from '../../services/ingreso-egreso.service';
 import { Store } from '@ngrx/store';
@@ -19,7 +19,7 @@ export class DetalleComponent implements OnInit, OnDestroy {
   ingresosEgresos: IngresoEgreso[] = [];
   ingresosSubs?: Subscription;
 
-  constructor(private store: Store<AppState>,
+  constructor(private store: Store<AppStateWithIngreso>,
               private ingresoEgresoService: IngresoEgresoService) { }
 
   ngOnInit(): void {

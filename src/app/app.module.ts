@@ -6,21 +6,10 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 // Modulos
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthModule } from './auth/auth.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
-import { EstadisticaComponent } from './ingreso-egreso/estadistica/estadistica.component';
-import { FooterComponent } from './shared/footer/footer.component';
-import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.component';
-import { LoginComponent } from './auth/login/login.component';
-import { NavbarComponent } from './shared/navbar/navbar.component';
-import { NgChartsModule } from 'ng2-charts';
 import { NgModule } from '@angular/core';
-import { OrdenIngresoPipe } from './pipes/orden-ingreso.pipe';
 //NgRx
-import {ReactiveFormsModule} from '@angular/forms'
-import { RegisterComponent } from './auth/register/register.component';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from './app.reducers';
@@ -29,22 +18,11 @@ import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    DashboardComponent,
-    IngresoEgresoComponent,
-    EstadisticaComponent,
-    DetalleComponent,
-    FooterComponent,
-    NavbarComponent,
-    SidebarComponent,
-    OrdenIngresoPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    NgChartsModule,
+    AuthModule,
     // AngularFireModule.initializeApp(environment.firebase),
     // AngularFirestoreModule
     provideFirebaseApp(() => initializeApp(environment.firebase)),
