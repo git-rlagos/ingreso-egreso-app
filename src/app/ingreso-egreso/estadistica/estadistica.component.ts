@@ -1,4 +1,9 @@
+import { ChartData, ChartEvent, ChartType } from 'chart.js';
 import { Component, OnInit } from '@angular/core';
+
+import { AppState } from '../../app.reducers';
+import { IngresoEgreso } from '../../models/ingreso-egreso.model';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-estadistica',
@@ -8,9 +13,58 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EstadisticaComponent implements OnInit {
 
-  constructor() { }
+  ingresos: number = 0;
+  egresos: number = 0;
+  totalIngresos: number = 0;
+  totalEgresos: number = 0;
+
+   // Doughnut
+   public doughnutChartLabels: string[] = [ 'Ingreso', 'Egreso' ];
+  public doughnutChartType: ChartType = 'doughnut';
+  public doughnutChartData?: ChartData<'doughnut'>;
+
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    this.store.select('ingresosEgresos').subscribe( ({ items }) => {
+        this.generarEstadistica(items);
+    });
+
   }
+
+  generarEstadistica(items: IngresoEgreso[]){
+    this.ingresos = 0;
+    this.egresos = 0;
+    this.totalIngresos = 0;
+    this.totalEgresos = 0;
+
+      for (const item of items) {
+        if(item.tipo === 'ingreso'){
+          this.totalIngresos += item.monto;
+          this.ingresos++;
+        }else{
+          this.totalEgresos += item.monto;
+          this.egresos++;
+        }
+      }
+
+      // colocando totales en el gráfico
+      this.doughnutChartData = {
+        labels: this.doughnutChartLabels,
+        datasets: [
+          { data: [ this.totalIngresos, this.totalEgresos ] },
+
+        ]
+      };
+  }
+
+   // events
+   public chartClicked({ event, active }: { event: ChartEvent, active: {}[] }): void {
+     console.log(event, active);
+   }
+
+   public chartHovered({ event, active }: { event: ChartEvent, active: {}[] }): void {
+     console.log(event, active);
+   }
 
 }

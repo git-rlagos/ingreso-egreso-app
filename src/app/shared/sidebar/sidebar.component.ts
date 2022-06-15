@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, filter } from 'rxjs';
 
+import { AppState } from '../../app.reducers';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import Swal from 'sweetalert2';
+import { ThemeService } from 'ng2-charts';
+import { Usuario } from 'src/app/models/usuario.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,12 +15,25 @@ import Swal from 'sweetalert2';
   styles: [
   ]
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
+
+  usuario?: Usuario | null;
+  usuarioSubs: Subscription;
 
   constructor(private authService: AuthService,
-              private router: Router) { }
+              private router: Router,
+              private store: Store<AppState>) {
+      this.usuarioSubs = this.store.select('user')
+                                    .pipe( filter( ({user}) => user != null))
+                                    .subscribe( ({user}) => this.usuario = user);
+
+  }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+      this.usuarioSubs.unsubscribe();
   }
 
   logout(){

@@ -14,7 +14,9 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.component';
 import { LoginComponent } from './auth/login/login.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
+import { NgChartsModule } from 'ng2-charts';
 import { NgModule } from '@angular/core';
+import { OrdenIngresoPipe } from './pipes/orden-ingreso.pipe';
 //NgRx
 import {ReactiveFormsModule} from '@angular/forms'
 import { RegisterComponent } from './auth/register/register.component';
@@ -35,12 +37,14 @@ import { environment } from '../environments/environment';
     DetalleComponent,
     FooterComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
+    OrdenIngresoPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    NgChartsModule,
     // AngularFireModule.initializeApp(environment.firebase),
     // AngularFirestoreModule
     provideFirebaseApp(() => initializeApp(environment.firebase)),

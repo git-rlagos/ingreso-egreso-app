@@ -1,4 +1,5 @@
 import * as authActions from '../auth/auth.actions';
+import * as ingresoEgresoActions from '../ingreso-egreso/ingreso-egreso.actions';
 
 import {
          Auth,
@@ -7,13 +8,13 @@ import {
          signInWithEmailAndPassword,
          signOut
 } from '@angular/fire/auth';
-import { Firestore, Unsubscribe, addDoc, collection, doc, getDoc, onSnapshot } from '@angular/fire/firestore';
-import { Subscription, map } from 'rxjs';
-import { Usuario, UsuarioConverter, UsuarioType } from '../models/usuario.model';
+import { Firestore, Unsubscribe, doc, onSnapshot } from '@angular/fire/firestore';
+import { Usuario, UsuarioConverter } from '../models/usuario.model';
 
 import { AppState } from '../app.reducers';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
 import { setDoc } from 'firebase/firestore';
 
 @Injectable({
@@ -23,9 +24,16 @@ export class AuthService {
 
   unsubscribe!: Unsubscribe;
 
+  private _user: Usuario | null = null;
+
   constructor(public auth: Auth,
               public firestore: Firestore,
-              private store: Store<AppState>) { }
+              private store: Store<AppState>) {
+   }
+
+  get user(){
+    return this._user;
+  }
 
   initAuthListener(){
     return authState(this.auth).subscribe( fuser => {
@@ -36,18 +44,21 @@ export class AuthService {
           (doc) => {
           // Respond to data
           if(doc.exists()){
-            console.log("Current data: ", doc.data());
             const usuario = doc.data();
+            this._user = usuario;
             this.store.dispatch( authActions.setUser({user: usuario}) );
           }else{
             console.log("No such document!");
+            this._user = null;
             this.store.dispatch( authActions.unSetUser());
           }
 
         });
       }else{
         if(this.unsubscribe) this.unsubscribe(); // Stop listening to changes
+        this._user = null;
         this.store.dispatch( authActions.unSetUser());
+        this.store.dispatch( ingresoEgresoActions.unSetItems());
       }
 
     });
@@ -79,8 +90,8 @@ export class AuthService {
 
   isAuth(){
     return authState(this.auth).pipe(
-      map( fUser => fUser != null)
-    );
+      map(fUser => (fUser !== null))
+    )
   }
 
 

@@ -7,7 +7,6 @@ export class Usuario {
     return new Usuario(uid, nombre, email);
   }
 
-
   /* Forma corta de crear un modelo en typescript */
   constructor(
     public uid: string,
